@@ -1,0 +1,36 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Quote Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="quote-box">
+        <p id="quote" class="quote">Click the button to generate a quote!</p>
+        <p id="author" class="author"></p>
+        <button onclick="fetchQuote()">New Quote</button>
+        <button onclick="shareOnTwitter()">Share on Twitter</button>
+    </div>
+
+    <script>
+        function fetchQuote() {
+            fetch('/quote')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('quote').innerText = `"${data.content}"`;
+                    document.getElementById('author').innerText = `- ${data.author}`;
+                });
+        }
+
+        function shareOnTwitter() {
+            const quote = document.getElementById('quote').innerText;
+            const author = document.getElementById('author').innerText;
+            const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(quote + ' ' + author)}`;
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
